@@ -1,452 +1,147 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     Umbra — link-hub / branding page
+     Links are wired. Drop this single file at the root of the
+     itselliott.github.io repo and enable GitHub Pages.
+     Self-contained: no build step, no dependencies.
+     ============================================================ -->
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Elliott — Link Tree</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umbra — browser-extension risk auditor</title>
+<meta name="description" content="Umbra audits the extensions installed in a browser — or across a whole fleet — and scores each one for data-exfiltration risk, with a focus on risky AI extensions.">
+<meta property="og:title" content="Umbra — browser-extension risk auditor">
+<meta property="og:description" content="Know what your browser extensions can actually do.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237c5cff'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='%23ffffff'/%3E%3Cpath d='M16 8.5a7.5 7.5 0 0 1 0 15z' fill='%232e216e'/%3E%3C/svg%3E">
 <style>
-  :root {
-    --text: #ffffff;
-    --muted: rgba(255, 255, 255, 0.78);
-    --card: rgba(15, 18, 28, 0.55);
-    --card-hover: rgba(20, 26, 40, 0.78);
-    --border: rgba(255, 255, 255, 0.16);
-    --accent: #5dd5ff;
+  :root{
+    --bg:#0c0e13; --panel:#13161f; --panel-2:#1a1e2a; --border:#262b38;
+    --text:#e7e9f0; --muted:#9aa0b3; --muted-2:#5c6373;
+    --brand:#7c5cff; --brand-2:#a78bfa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    background-image:radial-gradient(620px 380px at 50% -8%, rgba(124,92,255,.22), transparent 70%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100%;padding:48px 22px;
+  }
+  .card{width:100%;max-width:460px;text-align:center}
+
+  .mark{
+    width:70px;height:70px;margin:0 auto 20px;border-radius:18px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:38px;line-height:1;color:#fff;
+    box-shadow:0 12px 40px rgba(124,92,255,.4);
+  }
+  h1{font-size:31px;font-weight:800;letter-spacing:-.6px}
+  .tagline{
+    font-size:16px;color:var(--text);margin-top:8px;font-weight:500;
+    letter-spacing:-.1px;
+  }
+  .desc{
+    font-size:13.5px;color:var(--muted);line-height:1.65;
+    margin:14px auto 28px;max-width:404px;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .links{display:flex;flex-direction:column;gap:11px}
+  .link{
+    display:flex;align-items:center;gap:14px;
+    text-decoration:none;color:var(--text);text-align:left;
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:14px;padding:14px 17px;
+    transition:border-color .15s ease, background .15s ease, transform .12s ease;
+  }
+  .link:hover{
+    border-color:var(--brand);background:var(--panel-2);
+    transform:translateY(-1px);
+  }
+  .link .l-text{flex:1;min-width:0}
+  .link .l-title{font-size:14.5px;font-weight:600}
+  .link .l-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .link .arrow{
+    color:var(--muted-2);font-size:18px;line-height:1;flex-shrink:0;
+    transition:color .15s ease, transform .12s ease;
+  }
+  .link:hover .arrow{color:var(--brand);transform:translateX(2px)}
 
-  html, body {
-    min-height: 100%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: var(--text);
+  footer{
+    margin-top:30px;color:var(--muted-2);font-size:12px;line-height:1.6;
   }
+  footer .runs{color:var(--muted);}
 
-  /* Background image + dark fallback gradient. Drop bg.jpg next to index.html */
-  body {
-    position: relative;
-    background:
-      linear-gradient(180deg, rgba(5,8,16,0.55) 0%, rgba(5,8,16,0.75) 100%),
-      url('./bg.png') center/cover no-repeat fixed,
-      radial-gradient(ellipse at 70% 20%, #1e2a40 0%, #0a0d18 55%, #04060c 100%);
-    background-attachment: fixed, fixed, fixed;
-    min-height: 100vh;
-  }
-
-  /* Subtle vignette so the cards always have contrast */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 80%);
-    z-index: 0;
-  }
-
-  .wrap {
-    position: relative;
-    z-index: 1;
-    max-width: 560px;
-    margin: 0 auto;
-    padding: 56px 22px 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .avatar {
-    width: 116px;
-    height: 116px;
-    border-radius: 50%;
-    background:
-      url('./pf.jpg') center 22%/cover no-repeat,
-      linear-gradient(135deg, #5dd5ff, #5f27cd, #ff6b6b);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.55), inset 0 0 0 3px rgba(255,255,255,0.22);
-  }
-
-  h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    text-shadow: 0 2px 14px rgba(0,0,0,0.7);
-  }
-
-  .handle {
-    color: var(--muted);
-    font-size: 15px;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-  }
-
-  .bio {
-    text-align: center;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.55;
-    max-width: 460px;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.7);
-    margin-bottom: 4px;
-  }
-
-  .section-title {
-    width: 100%;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 1.8px;
-    color: #cfd6e4;
-    margin-top: 16px;
-    margin-bottom: 2px;
-    padding-left: 4px;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.85);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-title::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.25), rgba(255,255,255,0));
-  }
-
-  .links {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .link {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: left;
-    gap: 14px;
-    padding: 16px 18px;
-    background: var(--card);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
-  }
-
-  .link:hover {
-    background: var(--card-hover);
-    border-color: rgba(93, 213, 255, 0.45);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.5);
-  }
-
-  .icon {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.06);
-  }
-
-  .meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    flex: 1;
-    min-width: 0;
-    line-height: 1.25;
-  }
-
-  .meta small {
-    color: var(--muted);
-    font-weight: 400;
-    font-size: 12.5px;
-    margin-top: 2px;
-  }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: rgba(93, 213, 255, 0.14);
-    color: #9be3ff;
-    border: 1px solid rgba(93, 213, 255, 0.3);
-    margin-bottom: 3px;
-    width: fit-content;
-  }
-  .tag svg { width: 11px; height: 11px; }
-
-  /* ===== Themed section frame — each section sets its own --c1 / --c2 / --label ===== */
-  .section {
-    width: 100%;
-    position: relative;
-    padding: 22px 18px 20px;
-    margin-top: 18px;
-    border-radius: 18px;
-    background: linear-gradient(135deg,
-                  color-mix(in srgb, var(--c1) 14%, transparent),
-                  color-mix(in srgb, var(--c2) 14%, transparent));
-    border: 1px solid color-mix(in srgb, var(--c1) 32%, transparent);
-    box-shadow: 0 10px 40px color-mix(in srgb, var(--c1) 18%, transparent);
-    overflow: hidden;
-  }
-  .section::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: 18px;
-    padding: 1px;
-    background: linear-gradient(135deg,
-                  color-mix(in srgb, var(--c1) 60%, transparent),
-                  color-mix(in srgb, var(--c2) 50%, transparent),
-                  color-mix(in srgb, var(--c1) 35%, transparent));
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0.85;
-  }
-  .section .section-title {
-    margin-top: 0;
-    color: color-mix(in srgb, var(--label) 85%, white);
-    font-size: 13px;
-    letter-spacing: 2px;
-  }
-  .section .section-title::after {
-    background: linear-gradient(90deg, color-mix(in srgb, var(--c1) 50%, transparent), rgba(255,255,255,0));
-  }
-  .section .section-title svg { width: 14px; height: 14px; fill: currentColor; }
-  .section .links { gap: 10px; }
-  .section .link {
-    background: rgba(10, 12, 22, 0.62);
-    border-color: color-mix(in srgb, var(--c1) 28%, transparent);
-  }
-  .section .link:hover {
-    background: rgba(18, 22, 36, 0.85);
-    border-color: color-mix(in srgb, var(--c1) 60%, transparent);
-    box-shadow: 0 10px 30px color-mix(in srgb, var(--c1) 35%, transparent);
-  }
-  .section .icon {
-    background: linear-gradient(135deg,
-                  color-mix(in srgb, var(--c1) 24%, transparent),
-                  color-mix(in srgb, var(--c2) 24%, transparent));
-  }
-
-  /* Per-section palettes */
-  .section.music     { --c1: #ff78c8; --c2: #8c64ff; --label: #ffb8e0; }
-  .section.projects  { --c1: #5dd5ff; --c2: #5f6cff; --label: #b8e9ff; }
-  .section.construction { --c1: #6dd96a; --c2: #f4c542; --label: #d8f3a8; }
-  .section.game         { --c1: #ff3b3b; --c2: #3d7eff; --label: #ffffff; }
-  .section.flycat    { --c1: #4dc3ff; --c2: #ff6bb5; --label: #ffc7e3; }
-  .section.socials   { --c1: #ffd24d; --c2: #ff9d6a; --label: #ffe7a8; }
-
-  footer {
-    margin-top: 22px;
-    font-size: 12px;
-    color: var(--muted);
-    text-shadow: 0 1px 6px rgba(0,0,0,0.7);
-  }
-
-  @media (max-width: 480px) {
-    .wrap { padding: 36px 18px 60px; }
-    h1 { font-size: 24px; }
-    .link { font-size: 14px; padding: 14px 16px; }
+  @media (max-width:420px){
+    body{padding:36px 16px}
+    h1{font-size:27px}
+    .mark{width:62px;height:62px;font-size:33px;border-radius:16px}
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="avatar" role="img" aria-label="Elliott"></div>
-    <h1>Elliott</h1>
-    <p class="bio">Builder, musician, writer, game-maker. Welcome to everything I'm working on.</p>
+  <main class="card">
+    <div class="mark">◑</div>
+    <h1>Umbra</h1>
+    <p class="tagline">Know what your browser extensions can actually do.</p>
+    <p class="desc">
+      Umbra audits every extension installed in a browser — or across an entire
+      fleet — and scores each one for data-exfiltration risk, with a focus on the
+      new wave of risky AI extensions. It runs locally; nothing leaves the browser.
+    </p>
 
-    <!-- ===== The Fly Catfisher ===== -->
-    <section class="section flycat">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 6 5 10c0 4 3 6 7 6s7-2 7-6c0-4-3-8-7-8zm-2 9a1 1 0 110-2 1 1 0 010 2zm4 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-        The Fly Catfisher
-      </div>
-      <div class="links">
-        <a class="link" href="https://theflycatfisher.com" target="_blank" rel="noopener">
-          <div class="icon">🐈</div>
-          <div class="meta">The Fly Catfisher<small>theflycatfisher.com — cat toy company</small></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- ===== Ness Construction ===== -->
-    <section class="section construction">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M12 2 3 7v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V7l-9-5zm0 5 6 3v3c0 3.7-2.6 7-6 8-3.4-1-6-4.3-6-8V10l6-3z"/></svg>
-        Ness Construction EVS
-      </div>
-      <div class="links">
-        <a class="link" href="https://nessconstructionevs.com" target="_blank" rel="noopener">
-          <div class="icon">🏗️</div>
-          <div class="meta">Ness Construction EVS<small>nessconstructionevs.com — construction and environmental services company</small></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- ===== Projects & Writing ===== -->
-    <section class="section projects">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-        Projects &amp; Writing
-      </div>
-      <div class="links">
-
-      <a class="link" href="https://github.com/itselliott/preamble" target="_blank" rel="noopener">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.4 23.5 17.09 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-        </div>
-        <div class="meta">
-          <span class="tag">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 015.2 3H12a3 3 0 00-2.83 2H6.34A6 6 0 0112 6zm-6 6c0-.34.03-.67.08-1l3.92 6.83A6 6 0 016 12zm6 6l3-5.2A3 3 0 0012 15a3 3 0 01-2.6-1.5L7.4 10H12a3 3 0 012.83 2H18a6 6 0 01-6 6z"/></svg>
-            Chrome extension
-          </span>
-          Preamble
-          <small>Persistent context for every AI chat — set once, paste anywhere</small>
-        </div>
+    <nav class="links">
+      <a class="link" href="mailto:enwashingtonjr@gmail.com?subject=Umbra%20demo">
+        <span class="l-text">
+          <span class="l-title">Book a demo</span>
+          <span class="l-sub">Walk through the multi-tenant fleet console</span>
+        </span>
+        <span class="arrow">&rarr;</span>
       </a>
 
-      <a class="link" href="https://github.com/itselliott/semantic-cmd-f" target="_blank" rel="noopener">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.4 23.5 17.09 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-        </div>
-        <div class="meta">
-          <span class="tag">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 015.2 3H12a3 3 0 00-2.83 2H6.34A6 6 0 0112 6zm-6 6c0-.34.03-.67.08-1l3.92 6.83A6 6 0 016 12zm6 6l3-5.2A3 3 0 0012 15a3 3 0 01-2.6-1.5L7.4 10H12a3 3 0 012.83 2H18a6 6 0 01-6 6z"/></svg>
-            Chrome extension
-          </span>
-          Semantic Cmd-F
-          <small>Find anything on a page by meaning, not exact words</small>
-        </div>
+      <a class="link" href="https://github.com/itselliott/umbra">
+        <span class="l-text">
+          <span class="l-title">Source on GitHub</span>
+          <span class="l-sub">The full monorepo — extension, collector, backend</span>
+        </span>
+        <span class="arrow">&rarr;</span>
       </a>
 
-      <a class="link" href="https://github.com/itselliott/TubeSage" target="_blank" rel="noopener">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.4 23.5 17.09 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-        </div>
-        <div class="meta">TubeSage<small>AI-powered YouTube video analyzer</small></div>
+      <a class="link" href="https://github.com/itselliott/umbra/blob/main/docs/how-its-built.md">
+        <span class="l-text">
+          <span class="l-title">How it&rsquo;s built</span>
+          <span class="l-sub">The architecture and implementation, end to end</span>
+        </span>
+        <span class="arrow">&rarr;</span>
       </a>
 
-      <a class="link" href="https://unionwhitepaper.carrd.co/" target="_blank" rel="noopener">
-        <div class="icon">📄</div>
-        <div class="meta">Union Portability White Paper<small>A paper I wrote on union portability</small></div>
+      <a class="link" href="mailto:enwashingtonjr@gmail.com">
+        <span class="l-text">
+          <span class="l-title">Get in touch</span>
+          <span class="l-sub">Questions, feedback, or a partnership</span>
+        </span>
+        <span class="arrow">&rarr;</span>
       </a>
+    </nav>
 
-      </div>
-    </section>
-
-    <!-- ===== Game ===== -->
-    <section class="section game">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 00-2 2v8a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zM10 13H7v3H5v-3H2v-2h3V8h2v3h3v2zm6 1a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
-        Game
-      </div>
-      <div class="links">
-        <a class="link" href="https://madeyegames.itch.io/bomb-bombington" target="_blank" rel="noopener">
-          <div class="icon">🎮</div>
-          <div class="meta">Bomb Bombington<small>Top-down arcade defender — play the Bomb-er-In-Chief</small></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- ===== Music ===== -->
-    <section class="section music">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
-        Music
-      </div>
-      <div class="links">
-        <a class="link" href="https://ness.world" target="_blank" rel="noopener">
-          <div class="icon">🌐</div>
-          <div class="meta">ness.world<small>My music website</small></div>
-        </a>
-
-        <a class="link" href="https://soundcloud.com/hibb_music" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M1.5 13.5v3.7c0 .2.1.3.3.3s.3-.1.3-.3v-3.7c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-1.3v5c0 .2.1.3.3.3s.3-.1.3-.3v-5c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-.6v5.7c0 .2.1.3.3.3s.3-.1.3-.3v-5.7c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-.3v6c0 .2.1.3.3.3s.3-.1.3-.3v-6c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-.4v6.4c0 .2.1.3.3.3s.3-.1.3-.3V10.9c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-1.5v7.9c0 .2.1.3.3.3s.3-.1.3-.3V9.4c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-1.5v9.4c0 .2.1.3.3.3s.3-.1.3-.3V7.9c0-.2-.1-.3-.3-.3s-.3.1-.3.3zm1.6-.7v10.1c0 .2.1.3.3.3s.3-.1.3-.3V7.2c0-.2-.1-.3-.3-.3s-.3.1-.3.3zM14 6.7v10.6c0 .2.1.3.3.3h7.4c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3c-.3 0-.7.1-1 .2-.2-2.4-2.2-4.3-4.6-4.3-.7 0-1.4.2-2 .5V6.7c0-.2-.1-.3-.3-.3s-.3.1-.3.3z"/></svg>
-          </div>
-          <div class="meta">SoundCloud<small>@hibb_music</small></div>
-        </a>
-
-        <a class="link" href="https://instagram.com/hibb_music" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608C2.175 15.747 2.163 15.367 2.163 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.975-.975 2.242-1.249 3.608-1.311C8.416 2.175 8.796 2.163 12 2.163zM12 0C8.741 0 8.333.014 7.053.072 5.775.13 4.602.428 3.635 1.395c-.967.967-1.265 2.14-1.323 3.418C2.014 8.333 2 8.741 2 12c0 3.259.014 3.667.072 4.947.058 1.278.356 2.451 1.323 3.418.967.967 2.14 1.265 3.418 1.323C8.333 21.986 8.741 22 12 22s3.667-.014 4.947-.072c1.278-.058 2.451-.356 3.418-1.323.967-.967 1.265-2.14 1.323-3.418.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.058-1.278-.356-2.451-1.323-3.418-.967-.967-2.14-1.265-3.418-1.323C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </div>
-          <div class="meta">Instagram (Music)<small>@hibb_music</small></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- ===== Socials ===== -->
-    <section class="section socials">
-      <div class="section-title">
-        <svg viewBox="0 0 24 24"><path d="M16 11a3 3 0 100-6 3 3 0 000 6zm-8 0a3 3 0 100-6 3 3 0 000 6zm0 2c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.95v3h7v-3c0-2.66-5.33-4-8-4z"/></svg>
-        Socials
-      </div>
-      <div class="links">
-        <a class="link" href="https://www.linkedin.com/in/elliottwashington/" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          </div>
-          <div class="meta">LinkedIn<small>Elliott Washington</small></div>
-        </a>
-
-        <a class="link" href="https://bsky.app/profile/ness.world" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 600 530" width="20" height="20" fill="currentColor"><path d="M135.72 44.03C202.21 93.94 273.72 195.17 300 249.48c26.28-54.31 97.79-155.54 164.28-205.45C512.26 8.04 590-19.84 590 68.85c0 17.71-10.16 148.79-16.12 170.07-20.74 73.97-96.22 92.83-163.36 81.39 117.31 19.97 147.14 86.1 82.69 152.23-122.36 125.59-175.87-31.55-189.59-71.84-2.51-7.39-3.69-10.84-3.71-7.91-.02-2.93-1.2.52-3.71 7.91-13.72 40.29-67.23 197.43-189.59 71.84-64.45-66.13-34.62-132.26 82.69-152.23-67.14 11.44-142.62-7.42-163.36-81.39C19.96 217.64 9.8 86.56 9.8 68.85c0-88.69 77.74-60.81 125.92-24.82Z"/></svg>
-          </div>
-          <div class="meta">Bluesky<small>@ness.world</small></div>
-        </a>
-
-        <a class="link" href="https://instagram.com/mad_eye_art" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608C2.175 15.747 2.163 15.367 2.163 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.975-.975 2.242-1.249 3.608-1.311C8.416 2.175 8.796 2.163 12 2.163zM12 0C8.741 0 8.333.014 7.053.072 5.775.13 4.602.428 3.635 1.395c-.967.967-1.265 2.14-1.323 3.418C2.014 8.333 2 8.741 2 12c0 3.259.014 3.667.072 4.947.058 1.278.356 2.451 1.323 3.418.967.967 2.14 1.265 3.418 1.323C8.333 21.986 8.741 22 12 22s3.667-.014 4.947-.072c1.278-.058 2.451-.356 3.418-1.323.967-.967 1.265-2.14 1.323-3.418.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.058-1.278-.356-2.451-1.323-3.418-.967-.967-2.14-1.265-3.418-1.323C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </div>
-          <div class="meta">Instagram (Art)<small>@mad_eye_art</small></div>
-        </a>
-
-        <a class="link" href="https://tiktok.com/@hibbmusic" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43V8.7a8.16 8.16 0 004.77 1.52V6.78a4.85 4.85 0 01-1.84-.09z"/></svg>
-          </div>
-          <div class="meta">TikTok<small>@hibbmusic · 10.5k followers</small></div>
-        </a>
-
-        <a class="link" href="https://github.com/itselliott" target="_blank" rel="noopener">
-          <div class="icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56C20.21 21.4 23.5 17.09 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-          </div>
-          <div class="meta">GitHub<small>@itselliott</small></div>
-        </a>
-      </div>
-    </section>
-
-    <footer>© <span id="yr"></span> Elliott</footer>
-  </div>
-
-<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+    <footer>
+      <span class="runs">Umbra</span> &middot; a shadow-AI extension auditor<br>
+      Runs locally &mdash; your data never leaves the browser.
+    </footer>
+  </main>
 </body>
 </html>
+
+<!-- ============================================================
+     HOSTING
+     Upload this file to the root of the itselliott.github.io repo,
+     then: Settings -> Pages -> Source "Deploy from a branch" ->
+     branch main, folder / (root) -> Save.
+     Live ~1-2 min later at https://itselliott.github.io
+     Edit and re-commit to update.
+     ============================================================ -->
